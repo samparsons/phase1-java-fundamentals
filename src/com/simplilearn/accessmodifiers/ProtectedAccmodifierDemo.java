@@ -1,11 +1,17 @@
 package com.simplilearn.accessmodifiers;
 
-import com.simplilearn.accessmodifiersB.SuperHero;
-
 public class ProtectedAccmodifierDemo {
 
 	public static void main(String[] args) {
-		// TODO Auto-generated method stub
+		
+		Hero hero = new Hero();
+		
+		//access protected property
+		System.out.println("The Power is : "+hero.power);
+		hero.usePower();		
+		
+		//public methods
+		hero.showPower();
 
 	}
 

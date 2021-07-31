@@ -13,4 +13,6 @@ public class Hero {
 	public void showPower() {
 		System.out.println("The power shown : "+power+".");
 	}
+	
+	protected Hero() {}
 }

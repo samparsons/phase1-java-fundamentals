@@ -3,10 +3,9 @@ package com.simplilearn.accessmodifiers;
 public class PrivateAccessModifierTest {
 
 	public static void main(String[] args) {
-		// TODO Auto-generated method stub
-		//Account account = new Account();
+		Account account = new Account();
 		
-		// private property access
+		// private property access  > // compile time error
 		/*
 		 * All the below give a 'the field [field] is not visible'
 		 * System.out.println(account.id);
@@ -18,7 +17,7 @@ public class PrivateAccessModifierTest {
 		
 		
 		
-		//account.showUser();
+		account.showUser();
 	}
 
 }
@@ -44,5 +43,5 @@ class Account {
 	}
 	// private constructor
 	// Note : Private Constructor based class can not be instantiated.
-	private Account() { };
+	Account() { };
 }
