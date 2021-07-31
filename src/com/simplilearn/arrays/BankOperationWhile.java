@@ -16,7 +16,7 @@ public class BankOperationWhile {
 		while (until) {
 			System.out.println(" ::    Enter a UserId    ::");
 			int userId 	= input.nextInt();
-			System.out.println("---------------------------");
+
 			
 			//find a userId
 			for(int index=0;index<userIds.length;index++) {
