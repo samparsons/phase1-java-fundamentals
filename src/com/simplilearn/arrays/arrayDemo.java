@@ -1,6 +1,9 @@
 package com.simplilearn.arrays;
 
 import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
+import java.util.stream.Collectors;
 
 public class arrayDemo {
 
@@ -32,6 +35,14 @@ public class arrayDemo {
 		for(int index=0;index<numbers.length;index++) {
 			System.out.println("Element at index "+index+": "+numbers[index]);
 		}
+		
+		// find the position of a value in an array
+		// reference: https://www.geeksforgeeks.org/arrays-binarysearch-java-examples-set-1/
+		
+		Arrays.sort(numbers);
+		int intKey = 50;
+		System.out.println(intKey + " found at index = "
+                +Arrays.binarySearch(numbers,intKey));
 		
 
 	}
