@@ -10,6 +10,8 @@ public class UPMap {
 		
 		//registration
 		//if user does not exists. collect un and pw. then verify by login.
+		
+		
 	}
 
 }

@@ -8,7 +8,7 @@ import java.util.TreeMap;
 public class TestAllMap {
 
 	public static void main(String[] args) {
-		// imagine we're going grocery shoping and we are collecting grocery items. Name : Price
+		// imagine we're going grocery shopping and we are collecting grocery items. Name : Price
 		
 		Map<String, Double> mapOfItems = new HashMap<String,Double>();
 		
