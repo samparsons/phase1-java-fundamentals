@@ -58,9 +58,6 @@ public class BankOperation {
 			
 			
 			boolean until = true;
-			
-			
-			
 			while(until) {
 				System.out.println("Choose an option above. What would you like to do today?");
 				Scanner input2 			= new Scanner(System.in);
