@@ -5,6 +5,9 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.Scanner;
 
+import com.simplilearn.innerclass.Bank.Banking;
+import com.simplilearn.innerclass.OuterTest2.InnerTest;
+
 
 public class BankOperation {
 	
@@ -39,19 +42,20 @@ public class BankOperation {
 		if(!Objects.isNull(account)) {
 			Integer accountNumber = account.getAccountNumber();
 			String name = account.getName();
-			String email = account.getEmail();
-			long phone = account.getPhone();
-			int creditScore = account.getCreditScore();
-			double balance = account.getBalance();
+			//String email = account.getEmail();
+			//long phone = account.getPhone();
+			//int creditScore = account.getCreditScore();
+			//double balance = account.getBalance();
 			
 			System.out.println("------------------------------------------------------------------");
 			System.out.println(" :: Hello "+name+"! What would you like to do today?		::");
 			System.out.println("------------------------------------------------------------------");
 			System.out.println(" :: Options Below						::");
 			System.out.println("------------------------------------------------------------------");
+			System.out.println(" :: AccountNo: 		"+accountNumber+" 					::");
 			System.out.println(" :: See balance: 	type 'balance' 				::");
 			System.out.println(" :: Make deposit: 	type 'deposit' 				::");
-			System.out.println(" :: Make withdraw: 	type 'withdraw' 			::");
+			System.out.println(" :: Make withdrawal: 	type 'withdraw' 			::");
 			System.out.println(" :: Close account: 	type 'close' 				::");
 			System.out.println(" :: Quit: 		type 'quit' 				::");
 			System.out.println("------------------------------------------------------------------");
@@ -63,42 +67,40 @@ public class BankOperation {
 				Scanner input2 			= new Scanner(System.in);
 				String userResponse 	= input2.nextLine();
 				
+				// Get user balance
 				if(userResponse.toLowerCase().equals("balance")) {
 					System.out.println("Your balance is "+account.getBalance()+".");
 					System.out.println("------------------------------------------------------------------");
 				}
 				
+				// Make a deposit
 				if(userResponse.toLowerCase().equals("deposit")) {
 					System.out.println("How much would you like to deposit?");
 					Scanner deposit 	= new Scanner(System.in);
 					double depositAmt 	= deposit.nextDouble();
-					double newBalance	= depositAmt + account.getBalance();
-					account.setBalance(newBalance);
+					//Banking method deposit.
+					Banking banking = new Bank.Banking();
+					double newBalance = banking.deposit(account,depositAmt);
 					System.out.println("You have successfully deposited: $"+depositAmt);
 					System.out.println("Your new balance is: $"+newBalance);
 					System.out.println("------------------------------------------------------------------");
 				}
+				
+				// Make a withdrawal
 				if (userResponse.toLowerCase().equals("withdraw")) {
 					System.out.println("How much would you like to withdraw?");
 					Scanner withdraw 	= new Scanner(System.in);
 					double withdrawAmt 	= withdraw.nextDouble();
-					double newBalance	= account.getBalance() - withdrawAmt;
-					if(newBalance >= 0) {
-						System.out.println("You have successfully withdrawn: $"+withdrawAmt);
-						account.setBalance(Math.round(newBalance));
-					}else {
-						System.out.println("You did not have enough to withdraw: $"+withdrawAmt);
-						System.out.println("We have withdrawn: $"+account.getBalance());
-						account.setBalance(0.00d);
-					}
-					
+					Banking banking = new Bank.Banking();
+					banking.withdraw(account, withdrawAmt);
 					System.out.println("Your new balance is: $"+account.getBalance());					
 					System.out.println("------------------------------------------------------------------");
 				}
+				
+				
 				if (userResponse.toLowerCase().equals("close")) {
-					System.out.println("Removing your account number "+bankid+" now...");
-					bankMap.remove(bankid);
-					System.out.println("verification step. Account number "+bankid+"check result:"+bankMap.get(bankid));
+					Banking banking = new Bank.Banking();
+					banking.closeAccount(bankMap,bankid);
 					System.out.println("You're now being logged out. Thank you, we're sorry to lose you!");
 					System.out.println("Goodbye!");
 					System.out.println("------------------------------------------------------------------");

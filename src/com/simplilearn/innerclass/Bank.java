@@ -1,5 +1,7 @@
 package com.simplilearn.innerclass;
 
+import java.util.Map;
+
 public class Bank {
 	private int accountNumber;
 	private String name;
@@ -10,7 +12,31 @@ public class Bank {
 	private String state;
 	
 	
-	
+	static class Banking {
+		public double deposit(Bank b, double deposit) {
+			b.balance = b.balance + deposit;
+			return b.balance; 
+		}
+		
+		static public void withdraw(Bank b,double withdraw) {
+			double newBalance	= b.balance - withdraw;
+			if(newBalance >= 0) {
+				System.out.println("You have successfully withdrawn: $"+withdraw);
+				b.balance = newBalance;
+			}else{
+				System.out.println("You did not have enough to withdraw: $"+withdraw);
+				System.out.println("We have withdrawn: $"+b.balance);
+				b.balance = 0.00d;
+			}
+		}
+		
+		public void closeAccount(Map m,long id) {
+			System.out.println("Removing your account number "+id+" now...");
+			m.remove(id);
+			System.out.println("verification step. Account number "+id+"check result:"+m.get(id));
+		}
+		
+	}
 
 	public int getAccountNumber() {
 		return accountNumber;
