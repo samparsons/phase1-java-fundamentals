@@ -30,7 +30,7 @@ public class Bank {
 			}
 		}
 		
-		public void closeAccount(Map m,long id) {
+		public void closeAccount(Map<Long,Bank> m,long id) {
 			System.out.println("Removing your account number "+id+" now...");
 			m.remove(id);
 			System.out.println("verification step. Account number "+id+"check result:"+m.get(id));

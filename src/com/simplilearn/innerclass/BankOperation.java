@@ -53,9 +53,12 @@ public class BankOperation {
 			System.out.println(" :: Options Below						::");
 			System.out.println("------------------------------------------------------------------");
 			System.out.println(" :: AccountNo: 		"+accountNumber+" 					::");
+			//Banking
 			System.out.println(" :: See balance: 	type 'balance' 				::");
 			System.out.println(" :: Make deposit: 	type 'deposit' 				::");
 			System.out.println(" :: Make withdrawal: 	type 'withdraw' 			::");
+			//Finance
+			//others - need to check (insurance?)
 			System.out.println(" :: Close account: 	type 'close' 				::");
 			System.out.println(" :: Quit: 		type 'quit' 				::");
 			System.out.println("------------------------------------------------------------------");
