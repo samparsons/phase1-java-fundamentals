@@ -5,7 +5,7 @@ import java.util.regex.Pattern;
 public class RegExRealExample {
 
 	public static void main(String[] args) {
-		// WA pattern for that accepts alphanumeric chars only fo username
+		// WA pattern for that accepts alphanumeric chars only for username
 		String username = "sam94380";
 		String pattern1 = "[a-zA-Z0-9]+";
 		System.out.println("Result: "+Pattern.matches(pattern1, username));
