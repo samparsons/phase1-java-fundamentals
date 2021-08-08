@@ -1,4 +1,4 @@
-package com.simplilearn.serialization.exception.handling;
+package com.simplilearn.exception.handling;
 
 public class ExceptionHandlingDemo2 {
 	static int balance = 1000;
