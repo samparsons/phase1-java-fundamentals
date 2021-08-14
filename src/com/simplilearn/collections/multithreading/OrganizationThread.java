@@ -23,9 +23,10 @@ public class OrganizationThread {
 
 class Task {
 	public void updateWork() {}
+
 }
 
-class John extends Thread {//, Task { // error bc you cannot have multiple inheritance. If you want this case, multiple classes using a thread, use a runnable class.
+class John extends Thread { /* Task { error bc you cannot have multiple inheritance. If you want this case, multiple classes using a thread, use a runnable class.*/
 	
 	@Override
 	public void run() {
