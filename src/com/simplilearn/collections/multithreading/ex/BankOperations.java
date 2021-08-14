@@ -129,7 +129,11 @@ class Bank {
 				+ ", name=" + name + ", email=" + email + ", phone=" + phone + ", creditScore=" + creditScore
 				+ ", balance=" + balance + ", state=" + state + ", count=" + count + "]";
 	}
-
+	
+	//**********************************************************************//
+	//*****************************BEGIN CUSTOM CLASES**********************//
+	//**********************************************************************//
+	
 	public synchronized void auth(Bank b,String un,String pw) {
 		if(un.equalsIgnoreCase(b.username)) {
 			if(pw.equals(b.password)) {
@@ -145,25 +149,38 @@ class Bank {
 		}
 	}
 	
-	public synchronized double showBalance(Bank b,int accNo) {
+	public synchronized double showBalance(Bank b) {
 		return b.balance;
 	}
 	
-	public synchronized void withdraw(Bank b,int accNo,double withdrawAmt) {
+	public synchronized void withdraw(Bank b,double withdrawAmt) {
 		if(withdrawAmt > b.balance) {
-			System.out.println("Your withdraw amount is greater than your current balance.");
+			System.out.println("Your withdraw amount is greater than your current balance. Withdraw cancelled.");
 			
 		}else if(withdrawAmt < 0) {
 			System.out.println("Invalid withdraw amount. Must be greater than $0.00");
 		}else {
-			System.out.println("Withdraw commencing...");
+			System.out.println("Withdraw of "+withdrawAmt+" commencing...");
 			b.balance -= withdrawAmt;
 			System.out.println("Your new balance is $"+b.balance);
 		}
 	}
 	
-	public synchronized void deposit(Bank b,int accNo,double depositAmt) {
+	public synchronized void deposit(Bank b,double depositAmt) {
+		if(depositAmt>0) {
+			System.out.println("Deposit of "+depositAmt+"  commencing...");
+			b.balance += depositAmt;
+			System.out.println("Your new balance is $"+b.balance);
+		}else {
+			System.out.println("You must deposit a positive dollar amount. If you wish to make a withdraw, please type 'withdraw' in the interface.");
+		}
 		
+	}
+	
+	public synchronized void closeAccount(Map<Long,Bank> m,long id) {
+		System.out.println("Removing your account number "+id+" now...");
+		m.remove(id);
+		System.out.println("verification step. Account number "+id+"check result:"+m.get(id));
 	}
 
 	
@@ -198,19 +215,111 @@ public class BankOperations {
 		System.out.println(" :: Welcome to the Iron Bank of Braavos				::");
 		System.out.println("------------------------------------------------------------------");
 		
-		
-			
-			
-				Bank account = null;
-				boolean until = true;
-				int innerCount = 0;
-				while(until) {
-					if(Objects.isNull(account)) {
+		Thread thread1 = new Thread(() -> {
+			//set variables
+			Bank account = null;
+			boolean until = true;
+			int innerCount = 0;
+			boolean menuOptions = false;
+			while(until) {
+				if(Objects.isNull(account)) {
+					if(innerCount<=2) {
+						System.out.println("Enter your bank account number below.");
+						Scanner input1 			= new Scanner(System.in);				
+						long bankid 	= input1.nextLong();
+						account = bankMap.get(bankid);
+						System.out.println("------------------------------------------------------------------");
+						if(Objects.isNull(account)){
+							System.out.print("Account not found. ");
+							innerCount++;
+							if(innerCount<=2) {
+								System.out.println("Please try again.");
+								System.out.println(innerCount);
+							}
+						}
+					}else {
+						System.out.print("Session Terminated.");
+						until=false;
+					}
+				}
+				if(!Objects.isNull(account) && account.getAuth()==false) {
+					if(account.getCount()>=3) {
+						System.out.println("You've exceeded the allowable attempts. Terminating this session.");
+						until=false;
+					}else {
+					
+					System.out.println("Enter your bank username below.");
+					Scanner input2 			= new Scanner(System.in);
+					String un 	= input2.nextLine();
+					
+					System.out.println("Enter your bank password below.");
+					Scanner input3 			= new Scanner(System.in);
+					String pw 	= input3.nextLine();
+					
+					account.auth(account, un, pw);						
+					}
+				}
+				
+				if(account.getAuth()==true && menuOptions==false) {
+					Integer accNo = account.getAccNo();
+					String name = account.getName();				
+					System.out.println("------------------------------------------------------------------");
+					System.out.println(" :: Hello "+name+"! What would you like to do today?		::");
+					System.out.println("------------------------------------------------------------------");
+					System.out.println(" :: Options Below						::");
+					System.out.println("------------------------------------------------------------------");
+					System.out.println(" :: AccountNo: 		"+accNo+" 					::");
+					//Banking
+					System.out.println(" :: See balance: 	type 'balance' 				::");
+					System.out.println(" :: Make deposit: 	type 'deposit' 				::");
+					System.out.println(" :: Make withdrawal: 	type 'withdraw' 			::");
+					//Finance
+					//others - need to check (insurance?)
+					System.out.println(" :: Close account: 	type 'close' 				::");
+					System.out.println(" :: Quit: 		type 'quit' 				::");
+					System.out.println("------------------------------------------------------------------");
+					menuOptions = true;
+				}
+				if(account.getAuth()==true && menuOptions==true) {
+					System.out.println("Choose an option above. What would you like to do today?");
+					Scanner input4 			= new Scanner(System.in);
+					String userResponse 	= input4.nextLine();
+
+					// Get user balance
+					if(userResponse.toLowerCase().equals("balance")) {
+						System.out.println("Your balance is "+account.getBalance()+".");
+						System.out.println("------------------------------------------------------------------");
+					}
+					// Make a deposit
+					else if(userResponse.toLowerCase().equals("deposit")) {
+						System.out.println("Your balance is "+account.getBalance()+".");
+						System.out.println("How much would you like to deposit?");
+						System.out.println("------------------------------------------------------------------");
+						
+						Scanner deposit 	= new Scanner(System.in);
+						double depositAmt 	= deposit.nextDouble();
+						//Banking method deposit.
+						account.deposit(account,depositAmt);
+						System.out.println("------------------------------------------------------------------");
+					}
+					
+					// Make a withdrawal
+					else if (userResponse.toLowerCase().equals("withdraw")) {
+						System.out.println("Your balance is "+account.getBalance()+".");
+						System.out.println("How much would you like to withdraw?");
+						System.out.println("------------------------------------------------------------------");
+						Scanner withdraw 	= new Scanner(System.in);
+						double withdrawAmt 	= withdraw.nextDouble();
+						account.withdraw(account, withdrawAmt);			
+						System.out.println("------------------------------------------------------------------");
+					}
+					// close account
+					else if (userResponse.toLowerCase().equals("close")) {
 						if(innerCount<=2) {
 							System.out.println("Enter your bank account number below.");
-							Scanner input1 			= new Scanner(System.in);				
-							long bankid 	= input1.nextLong();
-							account = bankMap.get(bankid);
+							Scanner closeAcct	= new Scanner(System.in);				
+							long bankid 		= closeAcct.nextLong();
+							account 			= bankMap.get(bankid);
 							System.out.println("------------------------------------------------------------------");
 							if(Objects.isNull(account)){
 								System.out.print("Account not found. ");
@@ -219,54 +328,36 @@ public class BankOperations {
 									System.out.println("Please try again.");
 									System.out.println(innerCount);
 								}
+							}else {
+								account.closeAccount(bankMap,bankid);
+								System.out.println("You're now being logged out. Thank you, we're sorry to lose you!");
+								System.out.println("Goodbye!");
+								System.out.println("------------------------------------------------------------------");
+								until = false;
 							}
-						}else {
-							System.out.print("Session Terminated.");
-							until=false;
+							
 						}
 					}
-					if(!Objects.isNull(account)) {
-						if(account.getCount()>=3) {
-							System.out.println("You've exceeded the allowable attempts. Terminating this session.");
-							until=false;
-						}else {
-						
-						System.out.println("Enter your bank username below.");
-						Scanner input2 			= new Scanner(System.in);
-						String un 	= input2.nextLine();
-						
-						System.out.println("Enter your bank password below.");
-						Scanner input3 			= new Scanner(System.in);
-						String pw 	= input3.nextLine();
-						
-						account.auth(account, un, pw);						
-						}
-					
-					if(account.getAuth()==true) {
-						Integer accNo = account.getAccNo();
-						String name = account.getName();				
+					// quit
+					else if (userResponse.toLowerCase().equals("quit")) {
 						System.out.println("------------------------------------------------------------------");
-						System.out.println(" :: Hello "+name+"! What would you like to do today?		::");
 						System.out.println("------------------------------------------------------------------");
-						System.out.println(" :: Options Below						::");
 						System.out.println("------------------------------------------------------------------");
-						System.out.println(" :: AccountNo: 		"+accNo+" 					::");
-						//Banking
-						System.out.println(" :: See balance: 	type 'balance' 				::");
-						System.out.println(" :: Make deposit: 	type 'deposit' 				::");
-						System.out.println(" :: Make withdrawal: 	type 'withdraw' 			::");
-						//Finance
-						//others - need to check (insurance?)
-						System.out.println(" :: Close account: 	type 'close' 				::");
-						System.out.println(" :: Quit: 		type 'quit' 				::");
+						System.out.println("Goodbye!");
 						System.out.println("------------------------------------------------------------------");
-						System.out.println("Choose an option above. What would you like to do today?");
-						Scanner input4 			= new Scanner(System.in);
-						String userResponse 	= input4.nextLine();
+						System.out.println("------------------------------------------------------------------");
+						System.out.println("------------------------------------------------------------------");
+						until = false;
+					} else {
+						System.out.println("I did not recognize the command: "+userResponse);
+					}
 				}
-					
-				}
-			}
+				
+			}			
+		});
+		
+		thread1.start();
+		
 		
 	}
 
