@@ -35,7 +35,8 @@ class Bank {
 		this.password = password;
 	}
 	
-	public boolean getAuth() {
+	public synchronized boolean getAuth() {
+		notify();
 		return auth;
 	}
 	
@@ -159,6 +160,12 @@ class Bank {
 			
 		}else if(withdrawAmt < 0) {
 			System.out.println("Invalid withdraw amount. Must be greater than $0.00");
+			try {
+				wait(2000);
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.getMessage();
+			}
 		}else {
 			System.out.println("Withdraw of "+withdrawAmt+" commencing...");
 			b.balance -= withdrawAmt;
@@ -213,8 +220,8 @@ public class BankOperations {
 		
 		System.out.println("------------------------------------------------------------------");
 		System.out.println(" :: Welcome to the Iron Bank of Braavos				::");
+		System.out.println(" :: Rated the #1 bank in Westeros for 100 years!		::");
 		System.out.println("------------------------------------------------------------------");
-		
 		Thread thread1 = new Thread(() -> {
 			//set variables
 			Bank account = null;
@@ -341,11 +348,7 @@ public class BankOperations {
 					// quit
 					else if (userResponse.toLowerCase().equals("quit")) {
 						System.out.println("------------------------------------------------------------------");
-						System.out.println("------------------------------------------------------------------");
-						System.out.println("------------------------------------------------------------------");
 						System.out.println("Goodbye!");
-						System.out.println("------------------------------------------------------------------");
-						System.out.println("------------------------------------------------------------------");
 						System.out.println("------------------------------------------------------------------");
 						until = false;
 					} else {
@@ -355,8 +358,14 @@ public class BankOperations {
 				
 			}			
 		});
-		
+		try {
+			thread1.sleep(2000);
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.getMessage();
+		}
 		thread1.start();
+		
 		
 		
 	}
