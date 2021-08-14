@@ -16,6 +16,7 @@ class Bank {
 	private int creditScore;
 	private double balance;
 	private String state;
+	private int count = 0;
 		
 	
 	protected String getUsername() {
@@ -36,6 +37,10 @@ class Bank {
 	
 	public boolean getAuth() {
 		return auth;
+	}
+	
+	public int getCount() {
+		return count;
 	}
 
 	public void setAuth(boolean auth) {
@@ -98,11 +103,12 @@ class Bank {
 		this.state = state;
 	}
 
-	public Bank(String username, String password, int accNo, String name, String email, long phone, int creditScore,
-			double balance, String state) {
+	public Bank(String username, String password, boolean auth, int accNo, String name, String email, long phone,
+			int creditScore, double balance, String state, int count) {
 		super();
 		this.username = username;
 		this.password = password;
+		this.auth = auth;
 		this.accNo = accNo;
 		this.name = name;
 		this.email = email;
@@ -110,36 +116,32 @@ class Bank {
 		this.creditScore = creditScore;
 		this.balance = balance;
 		this.state = state;
+		this.count = count;
 	}
 
 	public Bank() {
-		super();
-	}
-	
+			super();
+		}
+
 	@Override
 	public String toString() {
-		return "Bank [username=" + username + ", password=" + password + ", accNo=" + accNo + ", name=" + name
-				+ ", email=" + email + ", phone=" + phone + ", creditScore=" + creditScore + ", balance=" + balance
-				+ ", state=" + state + "]";
+		return "Bank [username=" + username + ", password=" + password + ", auth=" + auth + ", accNo=" + accNo
+				+ ", name=" + name + ", email=" + email + ", phone=" + phone + ", creditScore=" + creditScore
+				+ ", balance=" + balance + ", state=" + state + ", count=" + count + "]";
 	}
 
-	public synchronized void auth(Bank b,String un,String pw,int count) {
-		if(count < 3) {
-			if(un.equalsIgnoreCase(b.username)) {
-				if(pw.equals(b.password)) {
-					System.out.println("Success, logging in now.");
-					b.setAuth(true);
-				} else {
-					System.out.println("Invaid password. Try again.");
-					count++;
-				}
-			}else {
-				System.out.println("Invalid Username. Try again.");
+	public synchronized void auth(Bank b,String un,String pw) {
+		if(un.equalsIgnoreCase(b.username)) {
+			if(pw.equals(b.password)) {
+				System.out.println("Success, logging in now.");
+				b.setAuth(true);
+			} else {
+				System.out.println("Invaid password. Try again.");
 				count++;
 			}
 		}else {
-			System.out.println("You've exceeded the allowable attempts. Terminating this session.");
-			boolean until = false;
+			System.out.println("Invalid Username. Try again.");
+			count++;
 		}
 	}
 	
@@ -178,10 +180,10 @@ public class BankOperations {
 		// showBalance, withdraw, deposit, etc. 
 		//use sleep, wait, notify, notify all
 		
-		Bank bank1 = new Bank("js","pw",1001,"Jon Snow","bastarts@gmail.com",	5555551234L, 780, 5123.09,"open");
-		Bank bank2 = new Bank("as","pw",1002,"Arya Stark",		"needle@gmail.com", 	5555551234L, 640, 1243.09,"open");
-		Bank bank3 = new Bank("dt","pw",1003,"Danerys Targaryen",	"dragonz@yahoo.com", 	5555551234L, 500, 1223.09,"open");
-		Bank bank4 = new Bank("rb","pw",1004,"Renly Baratheon",	"rendo@gmail.com", 		5555551234L, 310, 1213.09,"open");
+		Bank bank1 = new Bank("js","pw",false, 1001,"Jon Snow","bastarts@gmail.com",	5555551234L, 780, 5123.09,"open", 0);
+		Bank bank2 = new Bank("as","pw",false, 1002,"Arya Stark",		"needle@gmail.com", 	5555551234L, 640, 1243.09,"open",0);
+		Bank bank3 = new Bank("dt","pw",false, 1003,"Danerys Targaryen",	"dragonz@yahoo.com", 	5555551234L, 500, 1223.09,"open",0);
+		Bank bank4 = new Bank("rb","pw",false, 1004,"Renly Baratheon",	"rendo@gmail.com", 		5555551234L, 310, 1213.09,"open",0);
 		
 		Map<Long,Bank> bankMap = new LinkedHashMap<Long,Bank>();
 		
@@ -199,16 +201,36 @@ public class BankOperations {
 		
 			
 			
-				int count = 0;
+				Bank account = null;
 				boolean until = true;
+				int innerCount = 0;
 				while(until) {
-					System.out.println("Enter your bank account number below.");
-					System.out.println("count: "+count);
-					Scanner input1 			= new Scanner(System.in);
-					long bankid 	= input1.nextLong();
-					
-					Bank account = bankMap.get(bankid);
+					if(Objects.isNull(account)) {
+						if(innerCount<=2) {
+							System.out.println("Enter your bank account number below.");
+							Scanner input1 			= new Scanner(System.in);				
+							long bankid 	= input1.nextLong();
+							account = bankMap.get(bankid);
+							System.out.println("------------------------------------------------------------------");
+							if(Objects.isNull(account)){
+								System.out.print("Account not found. ");
+								innerCount++;
+								if(innerCount<=2) {
+									System.out.println("Please try again.");
+									System.out.println(innerCount);
+								}
+							}
+						}else {
+							System.out.print("Session Terminated.");
+							until=false;
+						}
+					}
 					if(!Objects.isNull(account)) {
+						if(account.getCount()>=3) {
+							System.out.println("You've exceeded the allowable attempts. Terminating this session.");
+							until=false;
+						}else {
+						
 						System.out.println("Enter your bank username below.");
 						Scanner input2 			= new Scanner(System.in);
 						String un 	= input2.nextLine();
@@ -217,7 +239,8 @@ public class BankOperations {
 						Scanner input3 			= new Scanner(System.in);
 						String pw 	= input3.nextLine();
 						
-						account.auth(account, un, pw, count);
+						account.auth(account, un, pw);						
+						}
 					
 					if(account.getAuth()==true) {
 						Integer accNo = account.getAccNo();
@@ -237,9 +260,9 @@ public class BankOperations {
 						System.out.println(" :: Close account: 	type 'close' 				::");
 						System.out.println(" :: Quit: 		type 'quit' 				::");
 						System.out.println("------------------------------------------------------------------");
-					System.out.println("Choose an option above. What would you like to do today?");
-					Scanner input4 			= new Scanner(System.in);
-					String userResponse 	= input4.nextLine();
+						System.out.println("Choose an option above. What would you like to do today?");
+						Scanner input4 			= new Scanner(System.in);
+						String userResponse 	= input4.nextLine();
 				}
 					
 				}
