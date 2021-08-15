@@ -61,10 +61,12 @@ public class Examples {
 	
 	
 	
-	private static void createDir(String path) {
+	private static void createDir(String path){
 		File file = new File(root+path);
-	    // check to see if directory exists
+		Path chPath = new Path();
 		
+	    // check to see if directory exists
+		boolean ckDir = file.exists(path);
 		//Creating the directory
 		boolean bool = file.mkdir();
 	    if(bool){
