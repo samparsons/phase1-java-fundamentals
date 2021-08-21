@@ -32,41 +32,13 @@ public class BinarySearchWithIteration {
 			if(inputs[midpoint]==value) {
 				return midpoint;
 			}else if (inputs[midpoint]<value) {
-				 start = midpoint+1;
+				 start = midpoint++;
 			}else {
-				end = midpoint-1;
+				end = midpoint--;
 			}
 		}
 		return -1;
 			
 	}
-	
-private static int binarySearchtwo(int[] inputs, int value) {
-		
-		int start =0;
-		int end = inputs.length-1;
-		
-		while(start<=end) {
-			// middpoint
-			int middpoint = (start+ end) / 2;
-			
-			// midpoint is the search value
-			if(inputs[middpoint]==value) {
-				return middpoint;
-			}
-			// search in righ half
-			else if(inputs[middpoint] < value) {
-				start = middpoint+1;
-			}
-			// search in left half
-			else {
-				end= middpoint-1;
-			}
-			
-		}	
-		return -1;
-	}
-	
-	
 
 }

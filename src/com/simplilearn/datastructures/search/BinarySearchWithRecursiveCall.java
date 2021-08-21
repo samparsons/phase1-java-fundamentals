@@ -37,9 +37,9 @@ public class BinarySearchWithRecursiveCall {
 		}
 		
 		if(inputs[midpoint] < value) {
-			return binarySearch(inputs,midpoint+1,end,value);
+			return binarySearch(inputs,midpoint++,end,value);
 		} else {
-			return binarySearch(inputs,start,midpoint-1,value);
+			return binarySearch(inputs,start,midpoint--,value);
 		}
 		
 		
