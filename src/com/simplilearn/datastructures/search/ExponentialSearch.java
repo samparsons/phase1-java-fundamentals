@@ -8,7 +8,6 @@ public class ExponentialSearch {
 		// TODO Auto-generated method stub
 		
 		int[] inputs = {-22,-15,-3,-1,5,7,9,20,35,55};
-		
 		int value = 0;
 		int result = exponentialSearch(inputs,value);
 		
