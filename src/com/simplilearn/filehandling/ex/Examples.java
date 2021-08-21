@@ -63,17 +63,19 @@ public class Examples {
 	
 	private static void createDir(String path){
 		File file = new File(root+path);
-		Path chPath = new Path();
-		
 	    // check to see if directory exists
-		boolean ckDir = file.exists(path);
-		//Creating the directory
-		boolean bool = file.mkdir();
-	    if(bool){
-	       System.out.println("Directory created successfully");
-	    }else{
-	       System.out.println("Sorry couldn’t create specified directory");
-	    }
+		boolean ckDir = file.exists();
+		if(ckDir) {
+			System.out.println("Directory Exists!");
+		}else {
+			//Creating the directory
+			boolean bool = file.mkdir();
+		    if(bool){
+		       System.out.println("Directory created successfully");
+		    }else{
+		       System.out.println("Sorry couldn’t create specified directory");
+		    }
+		}
 	}
 	
 	private static void createFileUsingFileClass(String path,String filename) {
