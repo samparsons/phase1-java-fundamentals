@@ -4,10 +4,9 @@ public class BinarySearchWithRecursiveCall {
 
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
+		int[] inputs = {-22,-15,-3,-1,7,9,20,35,44,55};
 		
-		int[] inputs = {-22,-10-5,0,10,20,30,40,50,60,70,80,90,100,110,120};
-		
-		int value = -10;
+		int value = -15;
 		
 		int start = 0;
 		
@@ -16,10 +15,10 @@ public class BinarySearchWithRecursiveCall {
 		int searchIndex = binarySearch(inputs,start,end,value);
 		
 		if(searchIndex>=0) {
-			System.out.println("element "+value+" found at index "+searchIndex);
-		}else {
-			System.out.println("value not found");
-		}
+			System.out.println("The Element : "+value +" is found at index : "+searchIndex);
+			}else {
+			System.out.println("Element does not exist.");
+			}
 
 	}
 	
@@ -40,7 +39,7 @@ public class BinarySearchWithRecursiveCall {
 		if(inputs[midpoint] < value) {
 			return binarySearch(inputs,midpoint+1,end,value);
 		} else {
-			return binarySearch(inputs,midpoint-1,end,value);
+			return binarySearch(inputs,start,midpoint-1,value);
 		}
 		
 		
